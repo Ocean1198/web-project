@@ -10,7 +10,10 @@ const player = {
     speed: 5
 };
 
+// 장애물 배열
 const obstacles = [];
+// 장애물 생성 타이머
+let spawnTimer = 0;
 
 // 키 상태 저장
 const keys = {
@@ -37,6 +40,7 @@ window.addEventListener("keyup", (e) => {
   }
 });
 
+// 장애물 생성
 function spawnObstacle() {
     const width = 40;
 
@@ -48,11 +52,12 @@ function spawnObstacle() {
         speed: 3
     };
 
+    // 장애물 배열에 장애물 추가
     obstacles.push(obstacle);
 }
 
-let spawnTimer = 0;
 function update() {
+    // 플레이어 이동
     if (keys.left) {
         player.x -= player.speed;
     }
@@ -60,6 +65,7 @@ function update() {
         player.x += player.speed;
     }
 
+    // canvas 탈주 방지
     if (player.x < 0) {
         player.x = 0;
     }
@@ -67,16 +73,19 @@ function update() {
         player.x = canvas.width - player.width;
     }
 
+    // 타이머 기반 장애물 생성
     spawnTimer++;
     if (spawnTimer > 60) {
         spawnObstacle();
         spawnTimer = 0;
     }
 
+    // 장애물 이동
     for (let i = 0; i < obstacles.length; i++) {
         obstacles[i].y += obstacles[i].speed;
     }
 
+    // canvas를 벗어난 장애물 삭제
     for (let i = obstacles.length - 1; i >= 0; i--) {
         if (obstacles[i].y > canvas.height) {
             obstacles.splice(i, 1);
@@ -98,7 +107,6 @@ function draw() {
 
     // 장애물
     ctx.fillStyle = "red";
-
     for (let i = 0; i < obstacles.length; i++) {
         const obs = obstacles[i];
         ctx.fillRect(obs.x, obs.y, obs.width, obs.height);
