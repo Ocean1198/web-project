@@ -35,7 +35,21 @@ window.addEventListener("keyup", (e) => {
   }
 });
 
+function spawnObstacle() {
+    const width = 40;
 
+    const obstacle = {
+        x: Math.random() * (canvas.width - width),
+        y: 0,
+        width: width,
+        height: 40,
+        speed: 3
+    };
+
+    obstacles.push(obstacle);
+}
+
+let spawnTimer = 0;
 function update() {
     if (keys.left) {
         player.x -= player.speed;
@@ -50,6 +64,22 @@ function update() {
     if (player.x + player.width > canvas.width) {
         player.x = canvas.width - player.width;
     }
+
+    spawnTimer++;
+    if (spawnTimer > 60) {
+        spawnObstacle();
+        spawnTimer = 0;
+    }
+
+    for (let i = 0; i < obstacles.length; i++); {
+        obstacles[i].y += obstacles[i].speed;
+    }
+
+    for (let i = obstacles.length - 1; i >= 0; i--) {
+        if (obstacles[i].y > canvas.height) {
+            obstacles.splice(i, 1);
+        }
+    }
 }
 
 function draw() {
@@ -63,6 +93,14 @@ function draw() {
     // 플레이어
     ctx.fillStyle = "blue";
     ctx.fillRect(player.x, player.y, player.width, player.height);
+
+    // 장애물
+    ctx.fillStyle = "red";
+
+    for (let i = 0; i < obstacles.length; i++) {
+        const obs = obstacles[i];
+        ctx.fillRect(obs.x, obs.y, obs.width, obs.height);
+    }
 }
 
 function gameLoop() {
