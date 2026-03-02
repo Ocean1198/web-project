@@ -20,6 +20,8 @@ let spawnCycle = 60;
 // 점수
 let score = 0;
 
+// 일시정지
+let isPaused = false;
 // 게임 오버 감지
 let isGameOver = false;
 
@@ -44,6 +46,9 @@ window.addEventListener("keydown", (e) => {
         if (isGameOver) {
             resetGame();
         }
+    }
+    if (e.key === "p" || e.key === "P") {
+        isPaused = !isPaused;
     }
 });
 
@@ -177,6 +182,13 @@ function draw() {
     ctx.font = "20px Arial";
     ctx.fillText("Score: " + score, 10, 30);
 
+    // 일시정지
+    if (isPaused) {
+        ctx.fillStyle = "black";
+        ctx.font = "30px Arial";
+        ctx.fillText("PAUSED", canvas.width / 2 - 60, canvas.height / 2);
+    }
+
     // 게임 오버 메시지
     if (isGameOver) {
         ctx.fillStyle = "black";
@@ -192,7 +204,9 @@ function draw() {
 }
 
 function gameLoop() {
-    update();
+    if (!isPaused && !isGameOver) {
+        update();
+    }
     draw();
     requestAnimationFrame(gameLoop);
 }
