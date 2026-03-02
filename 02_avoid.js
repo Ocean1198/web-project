@@ -53,10 +53,10 @@ window.addEventListener("keydown", (e) => {
 });
 
 window.addEventListener("keyup", (e) => {
-      if (e.key === "ArrowLeft") {
+      if (e.key === "ArrowLeft" || e.key === "A" || e.key === "a") {
         keys.left = false;
     }
-    if (e.key === "ArrowRight") {
+    if (e.key === "ArrowRight" || e.key === "D" || e.key === "d") {
         keys.right = false;
   }
 });
