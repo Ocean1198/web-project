@@ -32,6 +32,11 @@ window.addEventListener("keydown", (e) => {
     if (e.key === "ArrowRight") {
         keys.right = true;
     }
+    if (e.key === "r" || e.key === "R") {
+        if (isGameOver) {
+            resetGame();
+        }
+    }
 });
 
 window.addEventListener("keyup", (e) => {
@@ -67,6 +72,18 @@ function isColliding(a, b) {
         a.y + a.height < b.y ||
         a.y > b.y + b.height
     );
+}
+
+// reset 함수
+function resetGame() {
+    player.x = 180;
+    player.y = 550;
+
+    obstacles.length = 0;
+
+    spawnTimer = 0;
+
+    isGameOver = false;
 }
 
 function update() {
