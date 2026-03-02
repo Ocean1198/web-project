@@ -10,6 +10,8 @@ const player = {
     speed: 5
 };
 
+const obstacles = [];
+
 // 키 상태 저장
 const keys = {
     left: false,
@@ -71,7 +73,7 @@ function update() {
         spawnTimer = 0;
     }
 
-    for (let i = 0; i < obstacles.length; i++); {
+    for (let i = 0; i < obstacles.length; i++) {
         obstacles[i].y += obstacles[i].speed;
     }
 
