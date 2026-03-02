@@ -15,6 +15,9 @@ const obstacles = [];
 // 장애물 생성 타이머
 let spawnTimer = 0;
 
+// 게임 오버 감지
+let isGameOver = false;
+
 // 키 상태 저장
 const keys = {
     left: false,
@@ -56,7 +59,19 @@ function spawnObstacle() {
     obstacles.push(obstacle);
 }
 
+// 충돌 감지 함수 (AABB)
+function isColliding(a, b) {
+    return !(
+        a.x + a.width < b.x ||
+        a.x > b.x + b.width ||
+        a.y + a.height < b.y ||
+        a.y > b.y + b.height
+    );
+}
+
 function update() {
+    if (isGameOver) return;
+
     // 플레이어 이동
     if (keys.left) {
         player.x -= player.speed;
@@ -91,6 +106,13 @@ function update() {
             obstacles.splice(i, 1);
         }
     }
+
+    for (let i = 0; i < obstacles.length; i++) {
+        if (isColliding(player, obstacles[i])) {
+            isGameOver = true;
+            console.log("Game Over");
+        }
+    }
 }
 
 function draw() {
@@ -110,6 +132,12 @@ function draw() {
     for (let i = 0; i < obstacles.length; i++) {
         const obs = obstacles[i];
         ctx.fillRect(obs.x, obs.y, obs.width, obs.height);
+    }
+
+    if (isGameOver) {
+        ctx.fillStyle = "black";
+        ctx.font = "40px Arial";
+        ctx.fillText("GAME OVER", 80, 300);
     }
 }
 
