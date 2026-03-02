@@ -29,6 +29,9 @@ const keys = {
     right: false
 };
 
+// 최고 점수
+let highScore = Number(localStorage.getItem("highscore")) || 0;
+
 // 키 이벤트 리스너
 window.addEventListener("keydown", (e) => {
     if (e.key === "ArrowLeft" || e.key === "A" || e.key === "a") {
@@ -142,6 +145,10 @@ function update() {
         if (isColliding(player, obstacles[i])) {
             isGameOver = true;
             console.log("Game Over");
+            if (score > highScore) {
+                highScore = score;
+                localStorage.setItem("highScore", highScore);
+            }
         }
     }
 }
@@ -178,6 +185,9 @@ function draw() {
         
         ctx.font = "20px Arial";
         ctx.fillText("Press R to Restart", 110, 350);
+        
+        ctx.fillText(`Score: ${score}`, 10, 30);
+        ctx.fillText(`High Score: ${highScore}`, 10, 60);
     }
 }
 
