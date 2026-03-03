@@ -33,7 +33,7 @@ const keys = {
 };
 
 // 최고 점수
-let highScore = Number(localStorage.getItem("highscore")) || 0;
+let highScore = Number(localStorage.getItem("highScore")) || 0;
 
 // 개발자 모드
 const devMode = document.getElementById("devMode");
@@ -128,7 +128,7 @@ function update() {
     if (isGameOver) return;
 
     // 점수 증가
-    if (!isGameOver) score++;
+    score++;
 
     // 플레이어 이동
     if (keys.left) {
