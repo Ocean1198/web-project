@@ -12,18 +12,44 @@ def make(br, bc, cx = 0, cy = 0, board = None, seed = 42) :
         board = [[0 for _ in range(n)] for _ in range(n)]
 
     if cy == n : 
-        print(board)
-        return True
+        return board
 
-    available = {i for i in range(1, n + 1)}
-    board[cx][cy] = random.choice(list(available))
-    if cx == n-1 : 
-        if make(br, bc, 0, cy+1, board) :
-            return board
-    else : 
-        if make(br, bc, cx+1, cy, board) :
-            return board
-    board[cx][cy] = 0
+    
+    ## 이곳에 스도쿠 생성 규칙을 포함
+    # 같은 열에 같은 숫자 X
+    rule_row = set(board[cx])
+    # 같은 행에 같은 숫자 X
+    rule_col = set([row[cy] for row in board])
+    # 같은 블록에 같은 숫자 X
+    # 블록의 시작 좌표(sx, sy)
+    sc = (cy//bc)*bc
+    sr = (cx//br)*br
+    rule_blk = {
+        board[r][c]
+        for r in range(sr, sr + br)
+        for c in range(sc, sc + bc)
+    }
+
+    available = list({i for i in range(1, n + 1)} - (rule_row | rule_col | rule_blk))
+    random.shuffle(available)
+
+    if not available : 
+        return
+    
+    for num in available : 
+        board[cx][cy] = num
+        if cx == n-1 : 
+            result = make(br, bc, 0, cy+1, board)
+        else : 
+            result = make(br, bc, cx+1, cy, board)
+        if result : 
+            return result
+        
+        board[cx][cy] = 0
+
+    return False
 
 # test code: make 4*4 sudoku
-make(2, 2)
+board = make(3, 3)
+for i in board : 
+    print(*i)
