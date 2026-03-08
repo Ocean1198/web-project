@@ -229,14 +229,6 @@ def generate(br, bc, level, seed = 42) :
     
     return board_ori, board
 
-"""
-편의상 level은 다음과 같이 지정
-easy(쉬움)      : 0
-normal(보통)    : 1
-hard(어려움)    : 2
-extreme(극한)   : 3
-"""
-
 if __name__ == "__main__" : 
     board_ori, board = generate(2, 3, 0)
     for i in board_ori : 
