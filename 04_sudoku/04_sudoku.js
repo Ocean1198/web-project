@@ -12,3 +12,40 @@ python 파일로 이미 스도쿠 문제 생성의 알고리즘은 작성되어 
 5. 디자인
 등등...
 */
+
+const board = document.getElementById("board");
+
+const br = 3
+const bc = 3
+const size = br*bc
+board.style.setProperty("--size", size)
+
+for (let r = 0; r < size; r++) {
+    for (let c = 0; c < size; c++) {
+
+        const cell = document.createElement("div");
+        cell.className = "cell";
+        cell.classList.add("cell");
+
+        if (r % br === 0) cell.style.borderTop = "2px solid black";
+        if (c % bc === 0) cell.style.borderLeft = "2px solid black";
+
+        if (r === size - 1) cell.style.borderBottom = "2px solid black";
+        if (c === size - 1) cell.style.borderRight = "2px solid black";
+
+        cell.dataset.row = r;
+        cell.dataset.col = c;
+        cell.dataset.num = 0;
+
+        cell.addEventListener("click", () => {
+            clicked(r, c, 0);
+        });
+
+        board.appendChild(cell);
+
+    }
+}
+
+function clicked(r, c, num) {
+    console.log(r, c, num)
+}

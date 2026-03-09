@@ -1,0 +1,18 @@
+#board {
+    display: grid;
+    grid-template-columns: repeat(var(--size), 40px);
+    grid-template-rows: repeat(var(--size), 40px);
+}
+
+.cell {
+    width: 40px;
+    height: 40px;
+    text-align: center;
+    font-size: 20px;
+    border-right: 1px solid #999;
+    border-bottom: 1px solid #999;
+}
+
+.cell:focus {
+    background-color: #999;
+}
