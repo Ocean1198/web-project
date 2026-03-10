@@ -13,7 +13,7 @@ python 파일로 이미 스도쿠 문제 생성의 알고리즘은 작성되어 
 등등...
 */
 
-import { make_ans } from "./04_generate.js";
+import { generate } from "./04_generate.js";
 
 const board = document.getElementById("board");
 
@@ -22,7 +22,11 @@ const bc = 3
 const size = br*bc
 board.style.setProperty("--size", size)
 
-const sudoku = make_ans(br, bc);
+const [sudoku_ori, sudoku] = generate(br, bc);
+
+// for (let i = 0; i < br*bc; i++) {
+//     console.log(sudoku_ori[i]);
+// }
 
 for (let r = 0; r < size; r++) {
     for (let c = 0; c < size; c++) {
