@@ -13,6 +13,8 @@ python 파일로 이미 스도쿠 문제 생성의 알고리즘은 작성되어 
 등등...
 */
 
+import { make_ans } from "./04_generate.js";
+
 const board = document.getElementById("board");
 
 const br = 3
@@ -20,12 +22,18 @@ const bc = 3
 const size = br*bc
 board.style.setProperty("--size", size)
 
+const sudoku = make_ans(br, bc);
+
 for (let r = 0; r < size; r++) {
     for (let c = 0; c < size; c++) {
 
         const cell = document.createElement("div");
         cell.className = "cell";
         cell.classList.add("cell");
+
+        const n = sudoku[r][c];
+
+        cell.textContent = n;
 
         if (r % br === 0) cell.style.borderTop = "2px solid black";
         if (c % bc === 0) cell.style.borderLeft = "2px solid black";
@@ -35,10 +43,10 @@ for (let r = 0; r < size; r++) {
 
         cell.dataset.row = r;
         cell.dataset.col = c;
-        cell.dataset.num = 0;
+        cell.dataset.num = n;
 
         cell.addEventListener("click", () => {
-            clicked(r, c, 0);
+            clicked(r, c, n);
         });
 
         board.appendChild(cell);
