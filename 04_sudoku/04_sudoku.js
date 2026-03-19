@@ -37,7 +37,8 @@ for (let r = 0; r < size; r++) {
 
         const n = sudoku[r][c];
 
-        cell.textContent = n;
+        if (n != 0)
+            cell.textContent = n;
 
         if (r % br === 0) cell.style.borderTop = "2px solid black";
         if (c % bc === 0) cell.style.borderLeft = "2px solid black";
