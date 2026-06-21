@@ -25,6 +25,8 @@ const size = br*bc
 board.style.setProperty("--size", size)
 numberPad.style.setProperty("--size", size)
 
+const cells = [];
+
 const [sudoku_ori, sudoku] = generate(br, bc, level);
 
 // for (let i = 0; i < br*bc; i++) {
@@ -34,6 +36,7 @@ const [sudoku_ori, sudoku] = generate(br, bc, level);
 const focus = { r: null, c: null };
 
 for (let r = 0; r < size; r++) {
+    cells[r] = [];
     for (let c = 0; c < size; c++) {
 
         const cell = document.createElement("div");
@@ -59,14 +62,14 @@ for (let r = 0; r < size; r++) {
             clicked(r, c, n);
         });
 
+        cells[r][c] = cell;
         board.appendChild(cell);
-
     }
 }
 
 for (let i = 1; i <= size; i++) {
     const numButton = document.createElement("button");
-    numButton.className = "num-button";
+    numButton.className = "number-button";
     numButton.textContent = i;
     numButton.addEventListener("click", () => {
         inputNum(i);
@@ -80,6 +83,11 @@ function clicked(r, c, num) {
     focus.c = c;
 }
 
-function inputNum(num) { 
-    console.log(focus.r, focus.c, num)
+function inputNum(num) {
+    if (focus.r === null || focus.c === null) return;
+
+    if (sudoku[focus.r][focus.c] !== 0) return;
+
+    const cell = cells[focus.r][focus.c];
+    cell.textContent = num;
 }
