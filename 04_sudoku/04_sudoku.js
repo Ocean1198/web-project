@@ -16,18 +16,22 @@ python 파일로 이미 스도쿠 문제 생성의 알고리즘은 작성되어 
 import { generate } from "./04_generate.js";
 
 const board = document.getElementById("board");
+const numberPad = document.getElementById("number-pad");
 
 const br = 3
 const bc = 3
 const level = 0
 const size = br*bc
 board.style.setProperty("--size", size)
+numberPad.style.setProperty("--size", size)
 
 const [sudoku_ori, sudoku] = generate(br, bc, level);
 
 // for (let i = 0; i < br*bc; i++) {
 //     console.log(sudoku_ori[i]);
 // }
+
+const focus = { r: null, c: null };
 
 for (let r = 0; r < size; r++) {
     for (let c = 0; c < size; c++) {
@@ -60,6 +64,22 @@ for (let r = 0; r < size; r++) {
     }
 }
 
+for (let i = 1; i <= size; i++) {
+    const numButton = document.createElement("button");
+    numButton.className = "num-button";
+    numButton.textContent = i;
+    numButton.addEventListener("click", () => {
+        inputNum(i);
+    });
+    numberPad.appendChild(numButton);
+}
+
 function clicked(r, c, num) {
     console.log(r, c, num)
+    focus.r = r;
+    focus.c = c;
+}
+
+function inputNum(num) { 
+    console.log(focus.r, focus.c, num)
 }
