@@ -19,10 +19,11 @@ const board = document.getElementById("board");
 
 const br = 3
 const bc = 3
+const level = 0
 const size = br*bc
 board.style.setProperty("--size", size)
 
-const [sudoku_ori, sudoku] = generate(br, bc);
+const [sudoku_ori, sudoku] = generate(br, bc, level);
 
 // for (let i = 0; i < br*bc; i++) {
 //     console.log(sudoku_ori[i]);
@@ -39,6 +40,7 @@ for (let r = 0; r < size; r++) {
 
         cell.textContent = n == 0 ? "" : n;
 
+        // 각 블록의 굵은 경계
         if (r % br === 0) cell.style.borderTop = "2px solid black";
         if (c % bc === 0) cell.style.borderLeft = "2px solid black";
 
