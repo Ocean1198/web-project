@@ -18,12 +18,12 @@ import { generate } from "./04_generate.js";
 const board = document.getElementById("board");
 const numberPad = document.getElementById("number-pad");
 
-const br = 3
-const bc = 3
-const level = 0
-const size = br*bc
-board.style.setProperty("--size", size)
-numberPad.style.setProperty("--size", size)
+const br = 3;
+const bc = 3;
+const level = 0;
+const size = br*bc;
+board.style.setProperty("--size", size);
+numberPad.style.setProperty("--size", size);
 
 const cells = [];
 
@@ -36,7 +36,8 @@ const current = structuredClone(sudoku);
 //     console.log(sudoku_ori[i]);
 // }
 
-const fr, fc;
+let fr = null;
+let fc = null;
 
 for (let r = 0; r < size; r++) {
     cells[r] = [];
@@ -86,25 +87,83 @@ function clicked(r, c, num) {
     fc = c;
 }
 
-function isValidMove(row, col, num) {
-    for (let c = 0; c < size; c++) {
-        if (c !== col && current[row][c] === num) return false;
-    }
+function findViolations() {
+    const violations = new Set();
 
-    for (let r = 0; r < size; r++) {
-        if (r !== row && current[r][col] === num) return false;
-    }
+    function addUnitViolations(unit) {
+        const positionsByNum = new Map();
 
-    const blockStartRow = Math.floor(row / br) * br;
-    const blockStartCol = Math.floor(col / bc) * bc;
+        for (const { r, c } of unit) {
+            const num = current[r][c];
+            if (num === 0) continue;
 
-    for (let r = blockStartRow; r < blockStartRow + br; r++) {
-        for (let c = blockStartCol; c < blockStartCol + bc; c++) {
-            if ((r !== row || c !== col) && current[r][c] === num) return false;
+            if (!positionsByNum.has(num)) {
+                positionsByNum.set(num, []);
+            }
+            positionsByNum.get(num).push({ r, c });
+        }
+
+        for (const positions of positionsByNum.values()) {
+            if (positions.length < 2) continue;
+
+            for (const { r, c } of positions) {
+                violations.add(`${r},${c}`);
+            }
         }
     }
 
-    return true;
+    for (let r = 0; r < size; r++) {
+        const row = [];
+        for (let c = 0; c < size; c++) {
+            row.push({ r, c });
+        }
+        addUnitViolations(row);
+    }
+
+    for (let c = 0; c < size; c++) {
+        const col = [];
+        for (let r = 0; r < size; r++) {
+            col.push({ r, c });
+        }
+        addUnitViolations(col);
+    }
+
+    for (let blockRow = 0; blockRow < size; blockRow += br) {
+        for (let blockCol = 0; blockCol < size; blockCol += bc) {
+            const block = [];
+            for (let r = blockRow; r < blockRow + br; r++) {
+                for (let c = blockCol; c < blockCol + bc; c++) {
+                    block.push({ r, c });
+                }
+            }
+            addUnitViolations(block);
+        }
+    }
+
+    return violations;
+}
+
+function paintBoard(violations) {
+    for (let r = 0; r < size; r++) {
+        for (let c = 0; c < size; c++) {
+            const cell = cells[r][c];
+            const key = `${r},${c}`;
+
+            cell.style.backgroundColor = "";
+            
+            if (violations.has(key)) {
+                if (sudoku[r][c] !== 0) cell.style.color = "black";
+                else cell.style.color = "#FF4500";
+                cell.style.backgroundColor = "#FA8072";
+            } else if (sudoku[r][c] !== 0) {
+                cell.style.color = "black";
+            } else if (current[r][c] !== 0) {
+                cell.style.color = "#1E90FF";
+            } else {
+                cell.style.color = "";
+            }
+        }
+    }
 }
 
 function inputNum(num) {
@@ -116,9 +175,7 @@ function inputNum(num) {
 
     current[fr][fc] = num;
     cell.textContent = num;
-
-    if (isValidMove(fr, fc, num))
-        cell.style.color = "#1E90FF";
-    else 
-        cell.style.color = "#FF4500";
+    
+    const violations = findViolations();
+    paintBoard(violations);
 }
