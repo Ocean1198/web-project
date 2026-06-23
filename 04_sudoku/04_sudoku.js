@@ -85,6 +85,9 @@ function clicked(r, c, num) {
     console.log(r, c, num)
     fr = r;
     fc = c;
+
+    const violations = findViolations();
+    paintBoard(violations);
 }
 
 function findViolations() {
@@ -146,6 +149,7 @@ function findViolations() {
 function paintBoard(violations) {
     for (let r = 0; r < size; r++) {
         for (let c = 0; c < size; c++) {
+            const isFocused = r === fr && c === fc;
             const cell = cells[r][c];
             const key = `${r},${c}`;
 
@@ -159,6 +163,8 @@ function paintBoard(violations) {
                 cell.style.color = "black";
             } else if (current[r][c] !== 0) {
                 cell.style.color = "#1E90FF";
+            } else if (isFocused) {
+                cell.style.backgroundColor = "#DDEBFF";
             } else {
                 cell.style.color = "";
             }
