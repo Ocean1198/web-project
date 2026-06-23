@@ -27,13 +27,16 @@ numberPad.style.setProperty("--size", size)
 
 const cells = [];
 
+// sudoku_ori: 정답
+// sudoku: 문제 원본
 const [sudoku_ori, sudoku] = generate(br, bc, level);
+const current = structuredClone(sudoku);
 
 // for (let i = 0; i < br*bc; i++) {
 //     console.log(sudoku_ori[i]);
 // }
 
-const focus = { r: null, c: null };
+const fr, fc;
 
 for (let r = 0; r < size; r++) {
     cells[r] = [];
@@ -79,15 +82,43 @@ for (let i = 1; i <= size; i++) {
 
 function clicked(r, c, num) {
     console.log(r, c, num)
-    focus.r = r;
-    focus.c = c;
+    fr = r;
+    fc = c;
+}
+
+function isValidMove(row, col, num) {
+    for (let c = 0; c < size; c++) {
+        if (c !== col && current[row][c] === num) return false;
+    }
+
+    for (let r = 0; r < size; r++) {
+        if (r !== row && current[r][col] === num) return false;
+    }
+
+    const blockStartRow = Math.floor(row / br) * br;
+    const blockStartCol = Math.floor(col / bc) * bc;
+
+    for (let r = blockStartRow; r < blockStartRow + br; r++) {
+        for (let c = blockStartCol; c < blockStartCol + bc; c++) {
+            if ((r !== row || c !== col) && current[r][c] === num) return false;
+        }
+    }
+
+    return true;
 }
 
 function inputNum(num) {
-    if (focus.r === null || focus.c === null) return;
+    if (fr === null || fc === null) return;
 
-    if (sudoku[focus.r][focus.c] !== 0) return;
+    if (sudoku[fr][fc] !== 0) return;
 
-    const cell = cells[focus.r][focus.c];
+    const cell = cells[fr][fc];
+
+    current[fr][fc] = num;
     cell.textContent = num;
+
+    if (isValidMove(fr, fc, num))
+        cell.style.color = "#1E90FF";
+    else 
+        cell.style.color = "#FF4500";
 }
