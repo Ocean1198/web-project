@@ -6,7 +6,7 @@
 
 #number-pad {    
     display: grid;
-    grid-template-columns: repeat(var(--size), 40px);
+    grid-template-columns: repeat(var(--size_plus_1), 40px);
     gap: 4px;
     margin-top: 16px;
 }
@@ -14,6 +14,13 @@
     width: 40px;
     height: 40px;
     font-size: 18px;
+}
+
+#check-button {
+    width: 100%;
+    height: 40px;
+    font-size: 18px;
+    margin-top: 16px;
 }
 
 .cell {

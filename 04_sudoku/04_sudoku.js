@@ -22,8 +22,9 @@ const br = 3;
 const bc = 3;
 const level = 0;
 const size = br*bc;
+const size_plus_1 = size + 1;
 board.style.setProperty("--size", size);
-numberPad.style.setProperty("--size", size);
+numberPad.style.setProperty("--size", size_plus_1);
 
 const cells = [];
 
@@ -71,7 +72,7 @@ for (let r = 0; r < size; r++) {
     }
 }
 
-for (let i = 1; i <= size; i++) {
+for (let i = 0; i <= size; i++) {
     const numButton = document.createElement("button");
     numButton.className = "number-button";
     numButton.textContent = i;
@@ -79,6 +80,33 @@ for (let i = 1; i <= size; i++) {
         inputNum(i);
     });
     numberPad.appendChild(numButton);
+}
+
+// compare correct answer
+const checkButton = document.createElement("button");
+checkButton.id = "check-button";
+checkButton.textContent = "Check";
+checkButton.addEventListener("click", () => {
+    let isCorrect = checkAnswer();
+    if (isCorrect) {
+        alert("Keep going!");
+    } else {
+        alert("Something is wrong...");
+    }
+});
+
+function checkAnswer() {
+    let isCorrect = true;
+    for (let r = 0; r < size; r++) {
+        for (let c = 0; c < size; c++) {
+            if (current[r][c] !== sudoku_ori[r][c]) {
+                isCorrect = false;
+                break;
+            }
+        }
+        if (!isCorrect) break;
+    }
+    return isCorrect;
 }
 
 function clicked(r, c, num) {
@@ -179,9 +207,18 @@ function inputNum(num) {
 
     const cell = cells[fr][fc];
 
-    current[fr][fc] = num;
-    cell.textContent = num;
-    
-    const violations = findViolations();
-    paintBoard(violations);
+    if (num === 0) {
+        current[fr][fc] = 0;
+        cell.textContent = "";
+        const violations = findViolations();
+        paintBoard(violations);
+        return;
+    }
+    else {
+        current[fr][fc] = num;
+        cell.textContent = num;
+        
+        const violations = findViolations();
+        paintBoard(violations);
+    }
 }
