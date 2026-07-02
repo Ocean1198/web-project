@@ -10,7 +10,7 @@ function make_ans(br, bc, random) {
         if (c == n) 
             return true;
 
-        const block_idx = Math.floor(r / br) * bc + Math.floor(c / bc);
+        const block_idx = Math.floor(r / br) * br + Math.floor(c / bc);
         const available = [];
 
         let result;
@@ -69,7 +69,7 @@ function solver(board, br, bc) {
 
     for (let r = 0; r < n; r++) {
         for (let c = 0; c < n; c++) {
-            block_idx.push(Math.floor(r / br) * bc + Math.floor(c / bc));
+            block_idx.push(Math.floor(r / br) * br + Math.floor(c / bc));
         }
     }
 
@@ -96,7 +96,7 @@ function solver(board, br, bc) {
         }
 
         const [r, c] = empty_cells[index];
-        const b = Math.floor(r / br) * bc + Math.floor(c / bc);
+        const b = Math.floor(r / br) * br + Math.floor(c / bc);
 
         const available = [];
         for (let i = 1; i <= n; i++) {
