@@ -6,21 +6,44 @@
 
 #number-pad {    
     display: grid;
-    grid-template-columns: repeat(var(--size_plus_1), 40px);
+    grid-template-columns: repeat(var(--number-count), 40px);
     gap: 4px;
     margin-top: 16px;
 }
+
+.number-button,
+.check-button,
+.giveup-button {
+    border: 1px solid #999;
+    border-radius: 6px;
+    background-color: #f6f6f6;
+    cursor: pointer;
+}
+
 .number-button {
     width: 40px;
     height: 40px;
     font-size: 18px;
 }
 
-#check-button {
-    width: 100%;
+.number-button:hover,
+.check-button:hover,
+.giveup-button:hover {
+    background-color: #e9f0ff;
+}
+
+#buttons {
+    display: grid;
+    grid-template-columns: repeat(2, 120px);
+    gap: 8px;
+    margin-top: 8px;
+}
+
+.check-button,
+.giveup-button {
+    width: 120px;
     height: 40px;
-    font-size: 18px;
-    margin-top: 16px;
+    font-size: 16px;
 }
 
 .cell {

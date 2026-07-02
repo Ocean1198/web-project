@@ -17,6 +17,7 @@ import { generate } from "./04_generate.js";
 
 const board = document.getElementById("board");
 const numberPad = document.getElementById("number-pad");
+const buttons = document.getElementById("buttons");
 
 const br = 3;
 const bc = 3;
@@ -24,7 +25,7 @@ const level = 0;
 const size = br*bc;
 const size_plus_1 = size + 1;
 board.style.setProperty("--size", size);
-numberPad.style.setProperty("--size", size_plus_1);
+numberPad.style.setProperty("--number-count", size_plus_1);
 
 const cells = [];
 
@@ -82,9 +83,8 @@ for (let i = 0; i <= size; i++) {
     numberPad.appendChild(numButton);
 }
 
-// compare correct answer
 const checkButton = document.createElement("button");
-checkButton.id = "check-button";
+checkButton.className = "check-button";
 checkButton.textContent = "Check";
 checkButton.addEventListener("click", () => {
     let isCorrect = checkAnswer();
@@ -94,12 +94,40 @@ checkButton.addEventListener("click", () => {
         alert("Something is wrong...");
     }
 });
+buttons.appendChild(checkButton);
+
+const giveUpButton = document.createElement("button");
+giveUpButton.className = "giveup-button";
+giveUpButton.textContent = "Give Up";
+giveUpButton.addEventListener("click", () => {
+    for (let r = 0; r < size; r++) {
+        for (let c = 0; c < size; c++) {
+            const wasBlank = current[r][c] === 0;
+            const wasWrong = current[r][c] !== 0 && current[r][c] !== sudoku_ori[r][c];
+            const cell = cells[r][c];
+
+            current[r][c] = sudoku_ori[r][c];
+            cell.textContent = sudoku_ori[r][c];
+            cell.style.backgroundColor = wasWrong ? "#FA8072" : "";
+
+            if (sudoku[r][c] !== 0) {
+                cell.style.color = "black";
+            } else if (wasBlank || wasWrong) {
+                cell.style.color = "#FF4500";
+            } else {
+                cell.style.color = "#1E90FF";
+            }
+        }
+    }
+});
+buttons.appendChild(giveUpButton);
 
 function checkAnswer() {
     let isCorrect = true;
     for (let r = 0; r < size; r++) {
         for (let c = 0; c < size; c++) {
             if (current[r][c] !== sudoku_ori[r][c]) {
+                if (current[r][c] === 0) continue;
                 isCorrect = false;
                 break;
             }
