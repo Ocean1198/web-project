@@ -23,7 +23,7 @@ function make_ans(br, bc, random) {
             }
         }
 
-        if (available === 0) 
+        if (available.length === 0) 
             return false;
 
         shuffle(available, random);
@@ -50,10 +50,11 @@ function make_ans(br, bc, random) {
    
     }
 
-    dfs(0, 0);
-
-    return board;
-};
+    if (dfs(0, 0)) {
+        return board;
+    }
+    throw new Error("No solution found");
+}
 
 function solver(board, br, bc) {
     let n = br * bc;
