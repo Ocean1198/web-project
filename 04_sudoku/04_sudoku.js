@@ -41,6 +41,13 @@ const current = structuredClone(sudoku);
 let fr = null;
 let fc = null;
 
+let emptyCount = 0;
+for (let r = 0; r < size; r++) {
+    for (let c = 0; c < size; c++) {
+        if (sudoku[r][c] === 0) emptyCount++;
+    }
+}
+
 for (let r = 0; r < size; r++) {
     cells[r] = [];
     for (let c = 0; c < size; c++) {
@@ -236,6 +243,7 @@ function inputNum(num) {
     const cell = cells[fr][fc];
 
     if (num === 0) {
+        if (current[fr][fc] !== 0) emptyCount++;
         current[fr][fc] = 0;
         cell.textContent = "";
         const violations = findViolations();
@@ -243,10 +251,15 @@ function inputNum(num) {
         return;
     }
     else {
+        if (current[fr][fc] === 0) emptyCount--;
         current[fr][fc] = num;
         cell.textContent = num;
         
         const violations = findViolations();
         paintBoard(violations);
+
+        if (violations.size === 0 && emptyCount === 0) {
+            alert("Congratulations!");
+        }
     }
 }
