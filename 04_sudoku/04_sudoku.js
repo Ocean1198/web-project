@@ -19,24 +19,33 @@ const board = document.getElementById("board");
 const numberPad = document.getElementById("number-pad");
 const buttons = document.getElementById("buttons");
 
-const br = 3;
-const bc = 3;
-const level = 0;
-const size = br*bc;
-const size_plus_1 = size + 1;
+const newGamePanel = document.getElementById("new-game-panel");
+const brInput = document.getElementById("br-input");
+const bcInput = document.getElementById("bc-input");
+const levelInput = document.getElementById("level-input");
+const seedInput = document.getElementById("seed-input");
+
+const params = new URLSearchParams(location.search);
+let br = parseInt(params.get("br")) || 3;
+let bc = parseInt(params.get("bc")) || 3;
+let level = parseInt(params.get("level")) || 0;
+let seed = parseInt(params.get("seed")) || 42;
+let size = br * bc;
+let size_plus_1 = size + 1;
 board.style.setProperty("--size", size);
 numberPad.style.setProperty("--number-count", size_plus_1);
 
-const cells = [];
+console.log(`br: ${br}, bc: ${bc}, level: ${level}, seed: ${seed}`);
+
+let cells = [];
+let sudoku_ori, sudoku, current;
 
 // sudoku_ori: 정답
 // sudoku: 문제 원본
-const [sudoku_ori, sudoku] = generate(br, bc, level);
-const current = structuredClone(sudoku);
+[sudoku_ori, sudoku] = generate(br, bc, level, seed);
+current = structuredClone(sudoku);
 
-// for (let i = 0; i < br*bc; i++) {
-//     console.log(sudoku_ori[i]);
-// }
+let isFinish = false;
 
 let fr = null;
 let fc = null;
@@ -94,6 +103,7 @@ const checkButton = document.createElement("button");
 checkButton.className = "check-button";
 checkButton.textContent = "Check";
 checkButton.addEventListener("click", () => {
+    if (isFinish) return;
     let isCorrect = checkAnswer();
     if (isCorrect) {
         alert("Keep going!");
@@ -107,6 +117,7 @@ const giveUpButton = document.createElement("button");
 giveUpButton.className = "giveup-button";
 giveUpButton.textContent = "Give Up";
 giveUpButton.addEventListener("click", () => {
+    if (isFinish) return;
     for (let r = 0; r < size; r++) {
         for (let c = 0; c < size; c++) {
             const wasBlank = current[r][c] === 0;
@@ -126,8 +137,22 @@ giveUpButton.addEventListener("click", () => {
             }
         }
     }
+    setFinish(true);
 });
 buttons.appendChild(giveUpButton);
+
+newGamePanel.addEventListener("submit", (event) => {
+    event.preventDefault();
+
+    const params = new URLSearchParams({
+        br: brInput.value,
+        bc: bcInput.value,
+        level: levelInput.value,
+        seed: seedInput.value
+    });
+
+    location.href = `${location.pathname}?${params.toString()}`;
+});
 
 function checkAnswer() {
     let isCorrect = true;
@@ -145,6 +170,8 @@ function checkAnswer() {
 }
 
 function clicked(r, c, num) {
+    if (isFinish) return;
+
     console.log(r, c, num)
     fr = r;
     fc = c;
@@ -236,6 +263,8 @@ function paintBoard(violations) {
 }
 
 function inputNum(num) {
+    if (isFinish) return;
+
     if (fr === null || fc === null) return;
 
     if (sudoku[fr][fc] !== 0) return;
@@ -258,8 +287,16 @@ function inputNum(num) {
         const violations = findViolations();
         paintBoard(violations);
 
-        if (violations.size === 0 && emptyCount === 0) {
+        if (emptyCount === 0 && checkAnswer()) {
+            setFinish();
             alert("Congratulations!");
         }
     }
+}
+
+function setFinish() {
+    isFinish = true;
+    newGamePanel.hidden = !isFinish;
+    checkButton.disabled = isFinish;
+    giveUpButton.disabled = isFinish;
 }

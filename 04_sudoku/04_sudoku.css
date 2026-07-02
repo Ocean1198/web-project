@@ -58,3 +58,45 @@
 .cell:focus {
     background-color: #999;
 }
+
+#new-game-panel {
+    display: grid;
+    grid-template-columns: repeat(4, 80px) 120px;
+    gap: 8px;
+    align-items: end;
+    margin-top: 16px;
+}
+
+#new-game-panel[hidden] {
+    display: none;
+}
+
+#new-game-panel label {
+    display: grid;
+    gap: 4px;
+    font-size: 14px;
+}
+
+#new-game-panel input,
+#new-game-panel button {
+    box-sizing: border-box;
+    height: 36px;
+    border: 1px solid #999;
+    border-radius: 6px;
+    font-size: 15px;
+}
+
+#new-game-panel input {
+    width: 80px;
+    padding: 0 8px;
+}
+
+#new-game-panel button {
+    width: 120px;
+    background-color: #f6f6f6;
+    cursor: pointer;
+}
+
+#new-game-panel button:hover {
+    background-color: #e9f0ff;
+}
