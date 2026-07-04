@@ -52,6 +52,8 @@ numberPad.style.setProperty("--number-count", size_plus_1);
 
 // cells[r][c]: (r, c) 위치의 셀 DOM 요소
 let cells = [];
+// checkButton, giveUpButton: Check와 Give Up 버튼 DOM 요소
+let checkButton, giveUpButton;
 
 // sudoku_ori: 정답 스도쿠 보드
 // sudoku: 문제 스도쿠 보드
@@ -145,13 +147,13 @@ function createNumberPad() {
  * - Check와 Give Up 버튼을 생성하고 DOM에 추가한다.
  */
 function createButtons() {
-    const checkButton = document.createElement("button");
+    checkButton = document.createElement("button");
     checkButton.className = "check-button";
     checkButton.textContent = "Check";
     checkButton.addEventListener("click", () => { handleCheckClick() });
     buttons.appendChild(checkButton);
 
-    const giveUpButton = document.createElement("button");
+    giveUpButton = document.createElement("button");
     giveUpButton.className = "giveup-button";
     giveUpButton.textContent = "Give Up";
     giveUpButton.addEventListener("click", () => { handleGiveUpClick() });
@@ -180,7 +182,6 @@ function setupNewGamePanel() {
 function handleCellClick(r, c, num) {
     if (isFinish) return;
 
-    console.log(r, c, num)
     fr = r;
     fc = c;
 
