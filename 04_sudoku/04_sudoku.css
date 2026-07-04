@@ -1,9 +1,11 @@
+/* ---------- BOARD ---------- */
 #board {
     display: grid;
     grid-template-columns: repeat(var(--size), 40px);
     grid-template-rows: repeat(var(--size), 40px);
 }
 
+/* ---------- NUMBER PAD ---------- */
 #number-pad {    
     display: grid;
     grid-template-columns: repeat(var(--number-count), 40px);
@@ -11,6 +13,7 @@
     margin-top: 16px;
 }
 
+/* ---------- BUTTONS ---------- */
 .number-button,
 .check-button,
 .giveup-button {
@@ -46,6 +49,7 @@
     font-size: 16px;
 }
 
+/* ---------- CELLS ---------- */
 .cell {
     width: 40px;
     height: 40px;
@@ -59,6 +63,7 @@
     background-color: #999;
 }
 
+/* ---------- NEW GAME PANEL ---------- */
 #new-game-panel {
     display: grid;
     grid-template-columns: repeat(4, 80px) 120px;
