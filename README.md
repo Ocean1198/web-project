@@ -1,6 +1,6 @@
 # web-peoject
 html, css, js를 이용한 웹사이트 제작 연습용 프로젝트입니다.
-웹페이지: [text](https://ocean1198.github.io/web-project/)
+웹페이지: [text](https://ocean1198.github.io/web-project/sudoku-react)
 
 # index.html
 각 홈페이지로의 이동을 지원합니다.
